@@ -23,7 +23,7 @@ export default function Home() {
             <div className="h-screen flex flex-col items-center justify-center px-4 relative">
                 <div className="text-center mb-8 sm:mb-12 animate-fade-in">
                     <h1 className="text-5xl sm:text-7xl md:text-8xl font-bold mb-4 bg-gradient-to-r from-green-400 via-green-500 to-green-600 text-transparent bg-clip-text tracking-tight">
-                        wrapped leaderboard
+                        spotify wrapped leaderboard
                     </h1>
 
                     <p className="text-zinc-400 text-base sm:text-lg mb-6 sm:mb-8">
@@ -37,7 +37,7 @@ export default function Home() {
                         setIsLoading(true)
                         router.push('/upload')
                     }}
-                    className="px-8 sm:px-10 py-4 sm:py-5 bg-[#1db954] text-lg sm:text-xl font-bold rounded-2xl hover:bg-[#1db954]/90 transition-all text-center border-2 border-[#1db954] [box-shadow:0_4px_0_0_rgb(22_163_74)] hover:translate-y-[4px] hover:shadow-none animate-bounce-slow"
+                    className="px-8 sm:px-10 py-4 sm:py-5 bg-[#1db954] text-lg sm:text-xl font-bold rounded-2xl hover:bg-[#1db954]/90 transition-all text-center border-2 border-[#1db954] [box-shadow:0_4px_0_0_rgb(22_163_74)] hover:translate-y-[4px] hover:shadow-none"
                 >
                     {isLoading ? (
                         <Loader className="animate-spin mx-auto" />

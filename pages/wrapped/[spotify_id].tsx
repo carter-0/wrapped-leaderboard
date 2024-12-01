@@ -267,7 +267,7 @@ export default function WrappedProfile({ data }: Props) {
                                         onClick={handleButtonClick}
                                         className="flex-1 px-8 py-4 bg-[#1db954] text-lg sm:text-xl font-bold rounded-xl hover:bg-[#1db954]/80 transition-all text-center border-2 border-[#1db954] [box-shadow:0_3px_0_0_rgb(22_163_74)] hover:translate-y-[3px] hover:shadow-none"
                                     >
-                                        {isOwnProfile ? 'Share' : 'Add your minutes'}
+                                        {isOwnProfile ? 'Share' : 'Get your rank'}
                                     </button>
                                     <Link
                                         href="/"
