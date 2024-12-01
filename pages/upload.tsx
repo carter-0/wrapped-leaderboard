@@ -80,7 +80,7 @@ export default function Upload() {
         formData.append('file', file)
 
         try {
-            const response = await fetch('http://localhost:5001/wrapped/upload', {
+            const response = await fetch('https://api.trackify.am/wrapped/upload', {
                 method: 'POST',
                 headers: {
                     'Authorization': `Bearer ${token}`
@@ -176,7 +176,7 @@ export default function Upload() {
                                     />
                                     <div className="absolute top-0 left-0 w-full h-full bg-gradient-to-b from-black/50 to-transparent p-4">
                                         <span className="inline-block bg-green-500 text-white px-3 py-1 rounded-full text-sm">
-                                            Minutes listened visible
+                                            All data visible
                                         </span>
                                     </div>
                                 </div>

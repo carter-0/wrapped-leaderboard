@@ -5,7 +5,7 @@ const PAGE_SIZE = 250
 
 const getKey = (pageIndex: number, previousPageData: any) => {
     if (previousPageData && !previousPageData.data.length) return null
-    return `http://localhost:5001/wrapped/leaderboard?limit=${PAGE_SIZE}&offset=${pageIndex * PAGE_SIZE}`
+    return `https://api.trackify.am/wrapped/leaderboard?limit=${PAGE_SIZE}&offset=${pageIndex * PAGE_SIZE}`
 }
 
 const fetcher = (url: string) => fetch(url).then(r => r.json())

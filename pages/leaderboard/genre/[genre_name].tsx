@@ -17,7 +17,7 @@ export default function GenreLeaderboard() {
     const getKey = (pageIndex: number, previousPageData: any) => {
         if (previousPageData && !previousPageData.data.length) return null
         if (!genre_name) return null
-        return `http://localhost:5001/wrapped/leaderboard?genre=${encodeURIComponent(formattedGenreName)}&limit=${PAGE_SIZE}&offset=${pageIndex * PAGE_SIZE}`
+        return `https://api.trackify.am/wrapped/leaderboard?genre=${encodeURIComponent(formattedGenreName)}&limit=${PAGE_SIZE}&offset=${pageIndex * PAGE_SIZE}`
     }
 
     const { data, error, size, setSize, isLoading } = useSWRInfinite(getKey, fetcher)

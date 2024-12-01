@@ -28,13 +28,13 @@ const fetcher = (url: string) => fetch(url).then(r => r.json())
 
 export default function ExplorePage({ initialArtists, initialGenres }: ExplorePageProps) {
     const { data: artistsData } = useSWR<{ status: string, data: Artist[] }>(
-        'http://localhost:5001/wrapped/top_artists?limit=50',
+        'https://api.trackify.am/wrapped/top_artists?limit=50',
         fetcher,
         { fallbackData: { status: 'success', data: initialArtists } }
     )
 
     const { data: genresData } = useSWR<{ status: string, data: Genre[] }>(
-        'http://localhost:5001/wrapped/top_genres?limit=50',
+        'https://api.trackify.am/wrapped/top_genres?limit=50',
         fetcher,
         { fallbackData: { status: 'success', data: initialGenres } }
     )
@@ -132,8 +132,8 @@ export default function ExplorePage({ initialArtists, initialGenres }: ExplorePa
 
 export const getServerSideProps: GetServerSideProps<ExplorePageProps> = async () => {
     const [artistsRes, genresRes] = await Promise.all([
-        fetch('http://localhost:5001/wrapped/top_artists?limit=50'),
-        fetch('http://localhost:5001/wrapped/top_genres?limit=50')
+        fetch('https://api.trackify.am/wrapped/top_artists?limit=50'),
+        fetch('https://api.trackify.am/wrapped/top_genres?limit=50')
     ])
 
     const [artists, genres] = await Promise.all([

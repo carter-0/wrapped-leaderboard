@@ -17,7 +17,7 @@ export default function ArtistLeaderboard() {
     const getKey = (pageIndex: number, previousPageData: any) => {
         if (previousPageData && !previousPageData.data.length) return null
         if (!artist_name) return null
-        return `http://localhost:5001/wrapped/leaderboard?artist=${encodeURIComponent(formattedArtistName)}&limit=${PAGE_SIZE}&offset=${pageIndex * PAGE_SIZE}`
+        return `https://api.trackify.am/wrapped/leaderboard?artist=${encodeURIComponent(formattedArtistName)}&limit=${PAGE_SIZE}&offset=${pageIndex * PAGE_SIZE}`
     }
 
     const { data, error, size, setSize, isLoading } = useSWRInfinite(getKey, fetcher)

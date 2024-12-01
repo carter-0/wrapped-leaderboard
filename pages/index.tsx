@@ -14,7 +14,7 @@ export default function Home() {
     const router = useRouter()
     
     const { data, error } = useSWR<LeaderboardResponse>(
-        'http://localhost:5001/wrapped/leaderboard',
+        'https://api.trackify.am/wrapped/leaderboard',
         fetcher
     )
 
