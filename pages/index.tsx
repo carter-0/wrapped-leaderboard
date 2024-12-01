@@ -1,115 +1,128 @@
-import Image from "next/image";
-import localFont from "next/font/local";
+import SmallStatButton from '@/components/ui/SmallStatButton'
+import type { LeaderboardResponse } from '@/types/api'
+import { ChevronDown, Loader } from 'lucide-react'
+import Image from 'next/image'
+import { useRouter } from 'next/router'
+import { useState } from 'react'
+import useSWR from 'swr'
 
-const geistSans = localFont({
-  src: "./fonts/GeistVF.woff",
-  variable: "--font-geist-sans",
-  weight: "100 900",
-});
-const geistMono = localFont({
-  src: "./fonts/GeistMonoVF.woff",
-  variable: "--font-geist-mono",
-  weight: "100 900",
-});
+const fetcher = (url: string) => fetch(url).then(r => r.json())
 
 export default function Home() {
-  return (
-    <div
-      className={`${geistSans.variable} ${geistMono.variable} grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]`}
-    >
-      <main className="flex flex-col gap-8 row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="list-inside list-decimal text-sm text-center sm:text-left font-[family-name:var(--font-geist-mono)]">
-          <li className="mb-2">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] px-1 py-0.5 rounded font-semibold">
-              pages/index.tsx
-            </code>
-            .
-          </li>
-          <li>Save and see your changes instantly.</li>
-        </ol>
+    const [isLoading, setIsLoading] = useState(false)
+    const [isLoadingExplore, setIsLoadingExplore] = useState(false)
+    const router = useRouter()
+    
+    const { data, error } = useSWR<LeaderboardResponse>(
+        'http://localhost:5001/wrapped/leaderboard',
+        fetcher
+    )
 
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=default-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:min-w-44"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=default-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
+    return (
+        <div className="min-h-screen bg-gradient-to-b from-zinc-900 to-black text-white">
+            <div className="h-screen flex flex-col items-center justify-center px-4 relative">
+                <div className="text-center mb-8 sm:mb-12 animate-fade-in">
+                    <h1 className="text-5xl sm:text-7xl md:text-8xl font-bold mb-4 bg-gradient-to-r from-green-400 via-green-500 to-green-600 text-transparent bg-clip-text tracking-tight">
+                        wrapped leaderboard
+                    </h1>
+
+                    <p className="text-zinc-400 text-base sm:text-lg mb-6 sm:mb-8">
+                        upload your spotify wrapped to get your rank
+                    </p>
+                </div>
+
+                <SmallStatButton
+                    theme="green"
+                    onPress={() => {
+                        setIsLoading(true)
+                        router.push('/upload')
+                    }}
+                    className="px-8 sm:px-10 py-4 sm:py-5 bg-[#1db954] text-lg sm:text-xl font-bold rounded-2xl hover:bg-[#1db954]/90 transition-all text-center border-2 border-[#1db954] [box-shadow:0_4px_0_0_rgb(22_163_74)] hover:translate-y-[4px] hover:shadow-none animate-bounce-slow"
+                >
+                    {isLoading ? (
+                        <Loader className="animate-spin mx-auto" />
+                    ) : (
+                        "Get Your Rank"
+                    )}
+                </SmallStatButton>
+
+                <div className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center opacity-75 hover:opacity-100 transition-opacity cursor-pointer">
+                    <p className="text-zinc-400 mb-2 text-lg font-medium">View Leaderboard</p>
+                    <ChevronDown className="w-7 h-7 text-zinc-400 animate-bounce" />
+                </div>
+            </div>
+
+            <div className="max-w-6xl mx-auto px-4 py-12">
+                <div className="bg-zinc-900/50 backdrop-blur-sm rounded-3xl p-6 sm:p-10 mb-10 border-2 border-zinc-800 [box-shadow:0_4px_0_0_#27272a] translate-y-0">
+                    {error && (
+                        <div className="text-center p-12">
+                            <p className="text-red-400 text-xl">Failed to load leaderboard</p>
+                        </div>
+                    )}
+                    
+                    {!data && !error && (
+                        <div className="flex justify-center p-12">
+                            <Loader className="animate-spin w-10 h-10 text-green-400" />
+                        </div>
+                    )}
+                    
+                    {data && (
+                        <div className="space-y-5">
+                            {data.data.slice(0, 100).map((entry, index) => (
+                                <div 
+                                    key={entry.user.spotify_id} 
+                                    className="bg-zinc-800/50 rounded-2xl border-2 border-zinc-700 [box-shadow:0_4px_0_0_#374151] p-5 hover:bg-zinc-800/70 transition-colors"
+                                >
+                                    <div className="flex flex-col sm:flex-row items-start sm:items-center gap-5">
+                                        <div className="flex items-center gap-5 flex-1">
+                                            <div className="text-3xl font-bold text-green-400 w-10">
+                                                #{index + 1}
+                                            </div>
+                                            <div className="relative h-16 w-16 rounded-xl overflow-hidden border-2 border-zinc-600">
+                                                <Image
+                                                    src={entry.user.profile_picture_url}
+                                                    alt={entry.user.display_name}
+                                                    fill
+                                                    className="object-cover"
+                                                />
+                                            </div>
+                                            <div>
+                                                <div className="font-bold text-xl mb-1">{entry.user.display_name}</div>
+                                                <div className="flex flex-wrap gap-x-4 gap-y-1 text-zinc-400">
+                                                    <span className="text-green-400 font-medium">
+                                                        {entry.minutes_listened.toLocaleString()} minutes
+                                                    </span>
+                                                    <span>{entry.top_genre}</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <a
+                                            href={`/wrapped/${entry.user.spotify_id}`}
+                                            className="px-8 py-3 bg-zinc-700/50 text-base font-bold rounded-xl hover:bg-zinc-700 transition-all text-center border-2 border-zinc-600 w-full sm:w-auto [box-shadow:0_4px_0_0_#374151] hover:translate-y-[4px] hover:shadow-none"
+                                        >
+                                            View Wrapped
+                                        </a>
+                                    </div>
+                                </div>
+                            ))}
+                        </div>
+                    )}
+                </div>
+
+                <button 
+                    onClick={() => {
+                        setIsLoadingExplore(true)
+                        router.push('/leaderboard/explore')
+                    }}
+                    className="w-full px-10 py-5 bg-zinc-800 text-xl font-bold rounded-2xl hover:bg-zinc-700 transition-all text-center border-2 border-zinc-700 [box-shadow:0_4px_0_0_#374151] hover:translate-y-[4px] hover:shadow-none"
+                >
+                    {isLoadingExplore ? (
+                        <Loader className="animate-spin mx-auto" />
+                    ) : (
+                        "🌎 Explore Other Leaderboards"
+                    )}
+                </button>
+            </div>
         </div>
-      </main>
-      <footer className="row-start-3 flex gap-6 flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=default-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=default-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=default-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
-    </div>
-  );
+    )
 }
