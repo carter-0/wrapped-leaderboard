@@ -1,3 +1,4 @@
+import NumberFlow from '@number-flow/react'
 import { GetServerSideProps } from 'next'
 import Head from 'next/head'
 import Image from 'next/image'
@@ -56,11 +57,19 @@ function calculateOffset(rank: number, limit: number) {
 
 export default function WrappedProfile({ data }: Props) {
     const [isOwnProfile, setIsOwnProfile] = useState(false)
+    const [isFirstRender, setIsFirstRender] = useState(true)
     const router = useRouter()
 
     useEffect(() => {
         const storedId = localStorage.getItem('spotify_id')
         setIsOwnProfile(storedId === data.user.spotify_id)
+        
+        // Set isFirstRender to false after a small delay to trigger animations
+        const timer = setTimeout(() => {
+            setIsFirstRender(false)
+        }, 100)
+        
+        return () => clearTimeout(timer)
     }, [data.user.spotify_id])
 
     const handleButtonClick = async () => {
@@ -157,7 +166,9 @@ export default function WrappedProfile({ data }: Props) {
                         </h1>
                         <div className="inline-block bg-zinc-800/50 px-6 py-2 rounded-full border-2 border-zinc-700 [box-shadow:0_3px_0_0_#374151] translate-y-0 transition-all">
                             <p className="text-xl sm:text-2xl font-medium">
-                                Ranked <span className="text-green-400 font-bold">#{data.rank.toLocaleString()}</span> on the leaderboard
+                                Ranked <span className="text-green-400 font-bold">
+                                    #<NumberFlow value={isFirstRender ? 0 : data.rank} />
+                                </span> on the leaderboard
                             </p>
                         </div>
                     </div>
@@ -177,10 +188,10 @@ export default function WrappedProfile({ data }: Props) {
                             <div className="flex-1 space-y-6">
                                 <div className="bg-zinc-800/50 p-6 rounded-xl border-2 border-zinc-700 [box-shadow:0_3px_0_0_#374151] translate-y-0">
                                     <h2 className="text-3xl sm:text-4xl font-bold">
-                                        {data.minutes_listened.toLocaleString()} minutes
+                                        <NumberFlow value={isFirstRender ? 0 : data.minutes_listened} /> minutes
                                     </h2>
                                     <p className="text-lg sm:text-xl text-zinc-400">
-                                        That&apos;s {Math.round(data.minutes_listened / 60)} hours or {Math.round(data.minutes_listened / 60 / 24)} days of music!
+                                        That&apos;s <NumberFlow value={isFirstRender ? 0 : Math.round(data.minutes_listened / 60)} /> hours or <NumberFlow value={isFirstRender ? 0 : Math.round(data.minutes_listened / 60 / 24)} /> days of music!
                                     </p>
                                 </div>
 
@@ -189,13 +200,13 @@ export default function WrappedProfile({ data }: Props) {
                                         <p className="text-zinc-400 mb-1">Top Genre</p>
                                         <p className="text-xl sm:text-2xl font-bold">{data.top_genre}</p>
                                         <p className="text-sm text-zinc-500">
-                                            #{data.genre_rank.toLocaleString()} among {data.top_genre} listeners
+                                            #<NumberFlow value={isFirstRender ? 0 : data.genre_rank} /> among {data.top_genre} listeners
                                         </p>
                                     </div>
                                     <div className="bg-zinc-800/50 p-6 rounded-xl border-2 border-zinc-700 [box-shadow:0_3px_0_0_#374151] translate-y-0">
                                         <p className="text-zinc-400 mb-1">Music Taste</p>
                                         <p className="text-xl sm:text-2xl font-bold">{data.nickname}</p>
-                                        <p className="text-sm text-zinc-500">Diversity Score: {data.diversity}%</p>
+                                        <p className="text-sm text-zinc-500">Diversity Score: <NumberFlow value={isFirstRender ? 0 : data.diversity} />%</p>
                                     </div>
                                 </div>
                                 
@@ -203,7 +214,7 @@ export default function WrappedProfile({ data }: Props) {
                                     <div className="flex justify-between items-center mb-4">
                                         <h3 className="text-xl font-bold">Top Artists</h3>
                                         <p className="text-sm text-zinc-400">
-                                            #{data.artist_rank.toLocaleString()} among users with same top artist
+                                            #<NumberFlow value={isFirstRender ? 0 : data.artist_rank} /> among users with same top artist
                                         </p>
                                     </div>
                                     <div className="flex flex-wrap gap-2">
@@ -252,10 +263,10 @@ export default function WrappedProfile({ data }: Props) {
                                                 </a>
                                                 <div className="flex flex-wrap gap-x-4 gap-y-1 text-zinc-400 text-sm">
                                                     <span className="text-pink-400 font-medium">
-                                                        {soulmateData.data.matching_artists} shared artists
+                                                        <NumberFlow value={isFirstRender ? 0 : soulmateData.data.matching_artists} /> shared artists
                                                     </span>
                                                     <span>{soulmateData.data.top_genre}</span>
-                                                    <span>{soulmateData.data.minutes_listened.toLocaleString()} minutes</span>
+                                                    <span><NumberFlow value={isFirstRender ? 0 : soulmateData.data.minutes_listened} /> minutes</span>
                                                 </div>
                                             </div>
                                         </div>
@@ -304,7 +315,7 @@ export default function WrappedProfile({ data }: Props) {
                                     }`}
                                 >
                                     <span className="text-sm font-medium text-zinc-400 min-w-[32px]">
-                                        #{Number(globalOffset + index + 1).toLocaleString()}
+                                        #<NumberFlow value={isFirstRender ? 0 : Number(globalOffset + index + 1)} />
                                     </span>
                                     <div className="relative w-8 h-8 rounded-full overflow-hidden shrink-0">
                                         <Image
@@ -317,7 +328,7 @@ export default function WrappedProfile({ data }: Props) {
                                     <div className="flex-1 min-w-0">
                                         <p className="font-medium truncate">{entry.user.display_name}</p>
                                         <p className="text-sm text-zinc-400">
-                                            {entry.minutes_listened.toLocaleString()} minutes
+                                            <NumberFlow value={isFirstRender ? 0 : entry.minutes_listened} /> minutes
                                         </p>
                                     </div>
                                 </div>
@@ -347,7 +358,7 @@ export default function WrappedProfile({ data }: Props) {
                                     }`}
                                 >
                                     <span className="text-sm font-medium text-zinc-400 min-w-[32px]">
-                                        #{Number(genreOffset + index + 1).toLocaleString()}
+                                        #<NumberFlow value={isFirstRender ? 0 : Number(genreOffset + index + 1)} />
                                     </span>
                                     <div className="relative w-8 h-8 rounded-full overflow-hidden shrink-0">
                                         <Image
@@ -360,7 +371,7 @@ export default function WrappedProfile({ data }: Props) {
                                     <div className="flex-1 min-w-0">
                                         <p className="font-medium truncate">{entry.user.display_name}</p>
                                         <p className="text-sm text-zinc-400">
-                                            {entry.minutes_listened.toLocaleString()} minutes
+                                            <NumberFlow value={isFirstRender ? 0 : entry.minutes_listened} /> minutes
                                         </p>
                                     </div>
                                 </div>
@@ -390,7 +401,7 @@ export default function WrappedProfile({ data }: Props) {
                                     }`}
                                 >
                                     <span className="text-sm font-medium text-zinc-400 min-w-[32px]">
-                                        #{Number(artistOffset + index + 1).toLocaleString()}
+                                        #<NumberFlow value={isFirstRender ? 0 : Number(artistOffset + index + 1)} />
                                     </span>
                                     <div className="relative w-8 h-8 rounded-full overflow-hidden shrink-0">
                                         <Image
@@ -403,7 +414,7 @@ export default function WrappedProfile({ data }: Props) {
                                     <div className="flex-1 min-w-0">
                                         <p className="font-medium truncate">{entry.user.display_name}</p>
                                         <p className="text-sm text-zinc-400">
-                                            {entry.minutes_listened.toLocaleString()} minutes
+                                            <NumberFlow value={isFirstRender ? 0 : entry.minutes_listened} /> minutes
                                         </p>
                                     </div>
                                 </div>
