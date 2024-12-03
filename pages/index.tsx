@@ -3,20 +3,85 @@ import type { LeaderboardResponse } from '@/types/api'
 import { ChevronDown, Loader } from 'lucide-react'
 import Image from 'next/image'
 import { useRouter } from 'next/router'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import useSWR from 'swr'
 
 const fetcher = (url: string) => fetch(url).then(r => r.json())
+
+const WRAPPED_RELEASE_DATE = new Date('2024-12-04T12:00:00Z')
+
+function useCountdown() {
+    const [timeLeft, setTimeLeft] = useState<{hours: number, minutes: number, seconds: number} | null>(null)
+
+    useEffect(() => {
+        const calculateTimeLeft = () => {
+            const now = new Date()
+            const difference = WRAPPED_RELEASE_DATE.getTime() - now.getTime()
+
+            if (difference <= 0) {
+                setTimeLeft(null)
+                return
+            }
+
+            const hours = Math.floor(difference / (1000 * 60 * 60))
+            const minutes = Math.floor((difference % (1000 * 60 * 60)) / (1000 * 60))
+            const seconds = Math.floor((difference % (1000 * 60)) / 1000)
+
+            setTimeLeft({ hours, minutes, seconds })
+        }
+
+        calculateTimeLeft()
+        const timer = setInterval(calculateTimeLeft, 1000)
+
+        return () => clearInterval(timer)
+    }, [])
+
+    return timeLeft
+}
 
 export default function Home() {
     const [isLoading, setIsLoading] = useState(false)
     const [isLoadingExplore, setIsLoadingExplore] = useState(false)
     const router = useRouter()
+    const timeLeft = useCountdown()
     
     const { data, error } = useSWR<LeaderboardResponse>(
         'https://api.trackify.am/wrapped/leaderboard',
         fetcher
     )
+
+    if (timeLeft !== null) {
+        return (
+            <div className="min-h-screen bg-gradient-to-b from-zinc-900 to-black text-white">
+                <div className="h-screen flex flex-col items-center justify-center px-4">
+                    <div className="text-center mb-8 animate-fade-in">
+                        <h1 className="text-4xl sm:text-7xl md:text-8xl font-bold mb-4 bg-gradient-to-r from-green-400 via-green-500 to-green-600 text-transparent bg-clip-text tracking-tight">
+                            spotify wrapped leaderboard 2024
+                        </h1>
+                        <p className="text-zinc-400 text-lg sm:text-2xl mb-8 sm:mb-12">
+                            coming soon
+                        </p>
+                        <div className="flex flex-col sm:flex-row gap-4 justify-center text-3xl sm:text-6xl font-bold text-green-400">
+                            <div className="flex gap-4">
+                                <div className="flex-1 bg-zinc-900/50 backdrop-blur-sm rounded-2xl p-4 sm:p-6 border-2 border-zinc-800 min-w-[100px] sm:min-w-[160px]">
+                                    {String(timeLeft.hours).padStart(2, '0')}
+                                    <div className="text-xs sm:text-sm text-zinc-400 font-normal mt-1 sm:mt-2">hours</div>
+                                </div>
+                                <div className="flex-1 bg-zinc-900/50 backdrop-blur-sm rounded-2xl p-4 sm:p-6 border-2 border-zinc-800 min-w-[100px] sm:min-w-[160px]">
+                                    {String(timeLeft.minutes).padStart(2, '0')}
+                                    <div className="text-xs sm:text-sm text-zinc-400 font-normal mt-1 sm:mt-2">minutes</div>
+                                </div>
+                            </div>
+                            <div className="bg-zinc-900/50 backdrop-blur-sm rounded-2xl p-4 sm:p-6 border-2 border-zinc-800 min-w-[100px] sm:min-w-[160px] sm:w-[160px]">
+                                {String(timeLeft.seconds).padStart(2, '0')}
+                                <div className="text-xs sm:text-sm text-zinc-400 font-normal mt-1 sm:mt-2">seconds</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        )
+    }
 
     return (
         <div className="min-h-screen bg-gradient-to-b from-zinc-900 to-black text-white">
