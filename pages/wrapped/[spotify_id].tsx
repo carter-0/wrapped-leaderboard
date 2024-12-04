@@ -144,7 +144,7 @@ export default function WrappedProfile({ data }: Props) {
                                 <div className="flex-1">
                                     <h3 className="text-xl font-bold text-red-400 mb-2">Wrapped Flagged</h3>
                                     <p className="text-zinc-300 mb-4">
-                                        This wrapped has been flagged as suspicious by our anti-cheat system and is excluded from all leaderboards. If you believe this is a mistake, please contact support.
+                                        This wrapped has been flagged as suspicious by our anti-cheat system and is excluded from all leaderboards while we manually review it. If you believe this is a mistake, please contact support.
                                     </p>
                                     <a 
                                         href="mailto:support@trackify.am?subject=Wrapped Anti-Cheat"
