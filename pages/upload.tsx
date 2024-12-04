@@ -169,7 +169,7 @@ export default function Upload() {
                                 <h2 className="text-2xl font-bold mb-4 text-green-400">✅ Correct Example</h2>
                                 <div className="relative aspect-[9/16] w-full max-w-sm mx-auto rounded-xl overflow-hidden">
                                     <Image
-                                        src="/good.png"
+                                        src="/good.jpg"
                                         alt="Correct Wrapped Screenshot Example"
                                         fill
                                         className="object-cover"
