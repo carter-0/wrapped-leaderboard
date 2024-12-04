@@ -59,6 +59,10 @@ const nextConfig: NextConfig = {
       {
         protocol: 'https',
         hostname: '**.fbsbx.com'
+      },
+      {
+        protocol: 'https',
+        hostname: 'trackify.am'
       }
     ],
   }

@@ -188,6 +188,38 @@ export default function Home() {
                     )}
                 </button>
             </div>
+
+            <footer className="border-t border-zinc-800 mt-12">
+                <div className="max-w-6xl mx-auto px-4 py-8">
+                    <div className="flex flex-col sm:flex-row justify-between items-center gap-4 text-zinc-400">
+                        <div className="flex gap-4">
+                            <a 
+                                href="https://github.com/carter-0/wrapped-leaderboard" 
+                                target="_blank" 
+                                rel="noopener noreferrer"
+                                className="hover:text-white transition-colors"
+                            >
+                                GitHub
+                            </a>
+                            <a 
+                                href="https://trackify.am/terms-of-service" 
+                                className="hover:text-white transition-colors"
+                            >
+                                Terms of Service
+                            </a>
+                            <a 
+                                href="https://trackify.am/privacy-policy" 
+                                className="hover:text-white transition-colors"
+                            >
+                                Privacy Policy
+                            </a>
+                        </div>
+                        <div className="text-sm">
+                            © 2024 Carter Annandale
+                        </div>
+                    </div>
+                </div>
+            </footer>
         </div>
     )
 }
