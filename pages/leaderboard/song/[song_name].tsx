@@ -8,16 +8,16 @@ const fetcher = (url: string) => fetch(url).then(r => r.json())
 
 export default function GenreLeaderboard() {
     const router = useRouter()
-    const { genre_name } = router.query
+    const { song_name } = router.query
 
-    const formattedGenreName = genre_name 
-        ? decodeURIComponent(genre_name as string).replace(/-/g, ' ')
+    const formattedSongName = song_name 
+        ? decodeURIComponent(song_name as string).replace(/-/g, ' ')
         : ''
 
     const getKey = (pageIndex: number, previousPageData: any) => {
         if (previousPageData && !previousPageData.data.length) return null
-        if (!genre_name) return null
-        return `https://api.trackify.am/wrapped/leaderboard?genre=${encodeURIComponent(formattedGenreName)}&limit=${PAGE_SIZE}&offset=${pageIndex * PAGE_SIZE}`
+        if (!song_name) return null
+        return `https://api.trackify.am/wrapped/leaderboard?genre=${encodeURIComponent(formattedSongName)}&limit=${PAGE_SIZE}&offset=${pageIndex * PAGE_SIZE}`
     }
 
     const { data, error, size, setSize, isLoading } = useSWRInfinite(getKey, fetcher)
@@ -31,7 +31,7 @@ export default function GenreLeaderboard() {
         <LeaderboardList
             data={entries}
             error={error}
-            title={formattedGenreName.split(' ').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ')}
+            title={formattedSongName.split(' ').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ')}
             subtitle="Top Listeners by Minutes"
             isLoading={isLoadingMore}
             isReachingEnd={isReachingEnd}

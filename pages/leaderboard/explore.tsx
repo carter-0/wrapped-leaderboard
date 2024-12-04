@@ -54,7 +54,7 @@ export default function ExplorePage({ initialArtists, initialGenres }: ExplorePa
 
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
                     <div className="space-y-8">
-                        <h2 className="text-3xl font-bold text-center mb-6">Top Genres</h2>
+                        <h2 className="text-3xl font-bold text-center mb-6">Top Songs</h2>
                         <div className="space-y-4">
                             {genresData?.data.map((genre, index) => (
                                 <Link

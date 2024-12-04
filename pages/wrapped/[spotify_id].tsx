@@ -197,7 +197,7 @@ export default function WrappedProfile({ data }: Props) {
 
                                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                                     <div className="bg-zinc-800/50 p-6 rounded-xl border-2 border-zinc-700 [box-shadow:0_3px_0_0_#374151] translate-y-0">
-                                        <p className="text-zinc-400 mb-1">Top Genre</p>
+                                        <p className="text-zinc-400 mb-1">Top Song</p>
                                         <p className="text-xl sm:text-2xl font-bold">{data.top_genre}</p>
                                         <p className="text-sm text-zinc-500">
                                             #<NumberFlow value={isFirstRender ? 0 : data.genre_rank} /> among {data.top_genre} listeners
@@ -339,7 +339,7 @@ export default function WrappedProfile({ data }: Props) {
                             <div className="flex justify-between items-center mb-4">
                                 <h3 className="text-xl font-bold">{data.top_genre} Listeners</h3>
                                 <Link 
-                                    href={`/leaderboard/genre/${encodeURIComponent(data.top_genre)}`}
+                                    href={`/leaderboard/song/${encodeURIComponent(data.top_genre)}`}
                                     className="text-sm text-green-400 hover:text-green-300 transition-colors flex items-center gap-1"
                                 >
                                     View All
