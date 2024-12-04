@@ -421,6 +421,22 @@ export default function WrappedProfile({ data }: Props) {
                             ))}
                         </div>
                     </div>
+
+                    {!isOwnProfile && (
+                        <div className="bg-zinc-900/50 backdrop-blur-sm rounded-2xl p-6 text-center border-2 border-zinc-800 [box-shadow:0_3px_0_0_#27272a]">
+                            <h3 className="text-2xl font-bold mb-2">Want to see your own Wrapped?</h3>
+                            <p className="text-zinc-400 mb-4">Find out where you rank among other spotify users!</p>
+                            <Link
+                                href="/upload"
+                                className="inline-flex items-center gap-2 px-8 py-4 bg-[#1db954] text-lg font-bold rounded-xl hover:bg-[#1db954]/80 transition-all border-2 border-[#1db954] [box-shadow:0_3px_0_0_rgb(22_163_74)] hover:translate-y-[3px] hover:shadow-none"
+                            >
+                                Upload Your Wrapped
+                                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14 5l7 7m0 0l-7 7m7-7H3" />
+                                </svg>
+                            </Link>
+                        </div>
+                    )}
                 </div>
             </div>
         </>

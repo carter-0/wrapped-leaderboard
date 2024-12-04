@@ -59,7 +59,7 @@ export default function ExplorePage({ initialArtists, initialGenres }: ExplorePa
                             {genresData?.data.map((genre, index) => (
                                 <Link
                                     key={genre.name}
-                                    href={`/leaderboard/genre/${encodeURIComponent(genre.name.toLowerCase().replace(/ /g, '-'))}`}
+                                    href={`/leaderboard/song/${encodeURIComponent(genre.name.toLowerCase().replace(/ /g, '-'))}`}
                                     className="block bg-zinc-800/50 rounded-xl border-2 border-zinc-700 [box-shadow:0_3px_0_0_#374151] p-4 hover:bg-zinc-800/70 transition-all"
                                 >
                                     <div className="flex items-start gap-4">
